@@ -1,14 +1,14 @@
 const std = @import("std");
 
 pub fn main() !void {
+    const allocator = std.heap.page_allocator;
+
     const stdin = std.io.getStdIn().reader();
     const stdout = std.io.getStdOut().writer();
-    var buffer: [1024]u8 = undefined;
-    const buffer_slice = buffer[0..];
+    const slice = try allocator.alloc(u8, 10);
+    defer allocator.free();
 
-    try stdout.writeAll("Hello World!");
-    const len = try stdin.readUntilDelimiterOrEof(buffer_slice, '\n');
-    try stdout.writeAll(buffer_slice[0..len]);
+    try stdout.writeAll("Hello World!\n");
+    const data = try stdin.readUntilDelimiterOrEof(slice, '\n') orelse return;
+    try stdout.writeAll(data);
 }
-
-
