@@ -1,14 +1,16 @@
 const std = @import("std");
+const print = std.debug.print;
 
 pub fn main() !void {
     const allocator = std.heap.page_allocator;
 
-    const stdin = std.io.getStdIn().reader();
-    const stdout = std.io.getStdOut().writer();
-    const slice = try allocator.alloc(u8, 10);
-    defer allocator.free(slice);
+    var rng = std.rand.DefaultPrng.init(@intCast(std.time.nanoTimestamp()));
 
-    try stdout.writeAll("Hello World!\n");
-    const data = try stdin.readUntilDelimiterOrEof(slice, '\n') orelse return;
-    try stdout.writeAll(data);
+    const text = try std.fs.cwd().readFileAlloc(allocator, "first names", 1000);
+
+    const random_index = rng.random().intLessThan(@intCast(text.len));
+
+    const random_index2: usize = @intCast(random_index);
+
+    std.debug.print("Random! {}\n", .{text[random_index2]});
 }

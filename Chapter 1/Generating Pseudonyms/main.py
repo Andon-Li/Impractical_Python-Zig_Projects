@@ -10,7 +10,7 @@ while True:
     first_name = random.choice(first_names)
     last_name = random.choice(last_names)
 
-    print(first_name + " " + last_name)
+    print(first_name, last_name)
 
     print("Would you like to generate another name? (y/n)")
 
